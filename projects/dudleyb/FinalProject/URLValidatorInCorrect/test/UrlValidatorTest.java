@@ -494,6 +494,30 @@ protected void setUp() {
        assertTrue(validator.isValid("http://www.apache.org:8/path"));
        assertTrue(validator.isValid("http://www.apache.org:/path"));
    }
+   
+   // the random testing function, testing random query strings
+   public void testValidatorRandom1() {
+	   UrlValidator validator = new UrlValidator();
+	   String ValidCharacters = "abcdefghijklmnopqrstuvwxyz1234567890";
+	   // all of these characters are valid in query strings
+	   String ValidSpecials = "/?#@!$&()=,+*";
+	   String URLBase = "http://example.com/";
+	   
+	   for(int j=0; j<200000; j++) {
+		   String QueryString = "";
+		   for(int i=0; i<40; i++) {
+			   // generate a random query string, no same special in a row
+			   int CharRandom = (int)(Math.random() * ValidCharacters.length());
+			   QueryString = QueryString + ValidCharacters.toCharArray()[CharRandom];
+			   if(i % 5 == 0 && i != 0) {
+				   // add a special character
+				   int SpecialRandom = (int)(Math.random() * ValidSpecials.length());
+				   QueryString = QueryString + ValidSpecials.toCharArray()[SpecialRandom];
+			   }
+		   }
+		   assertTrue(URLBase+QueryString, validator.isValid(URLBase+QueryString));
+	   }
+   }
 
    public void testValidator420() {
        UrlValidator validator = new UrlValidator();
