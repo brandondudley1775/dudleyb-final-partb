@@ -518,6 +518,35 @@ protected void setUp() {
 		   assertTrue(URLBase+QueryString, validator.isValid(URLBase+QueryString));
 	   }
    }
+   
+   // test random domains
+   public void testValidatorRandom2() {
+	   UrlValidator validator = new UrlValidator();
+	   String ValidCharacters = "abcdefghijklmnopqrstuvwxyz1234567890";
+	   String URLBase = "http://";
+	   String URLEnd = ".com/";
+	   
+	   for(int j=0; j<200000; j++) {
+		   String DomainString = "";
+		   for(int i=0; i<40; i++) {
+			   // generate a random query string, no same special in a row
+			   int CharRandom = (int)(Math.random() * ValidCharacters.length());
+			   DomainString = DomainString + ValidCharacters.toCharArray()[CharRandom];
+		   }
+		   assertTrue(URLBase+DomainString+URLEnd, validator.isValid(URLBase+DomainString+URLEnd));
+	   }
+   }
+   
+   // test every possible port number
+   public void testValidatorRandom3() {
+	   UrlValidator validator = new UrlValidator();
+	   String URLBase = "http://example.com:";
+	   
+	   for(int j=0; j<65535; j++) {
+		   String port = Integer.toString(j);
+		   assertTrue(URLBase+port+"/", validator.isValid(URLBase+port+"/"));
+	   }
+   }
 
    public void testValidator420() {
        UrlValidator validator = new UrlValidator();
